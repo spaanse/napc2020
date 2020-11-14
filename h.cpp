@@ -3,6 +3,7 @@
 #include <utility>
 #include <tuple>
 #include <algorithm>
+#include <iomanip>
 using namespace std;
 
 typedef vector<int> vi;
@@ -54,24 +55,33 @@ struct Mod {
 	friend istream& operator>>(istream& is, Mod& obj) { ll newVal; is >> newVal; obj = newVal; return is; }
 };
 
+typedef vector<Mod> vm;
+typedef vector<vm> vvm;
+typedef vector<vvm> vvvm;
+
 int main() {
 	int height, numStrong;
 	cin >> height >> numStrong;
-	int numPeople = height*(height+1)/2;
+	int numPeople = height*(height+1)/2, numFlexible=numPeople-numStrong;
 	
-	vector<vector<Mod> > dp(height+1, vector<Mod>(numPeople,0));
-	for (int i = 0; i < height; i++) {
-		dp[i][0] = 1;
-	}
-	dp[1][1] = 1;
+	vvvm dp(height+1, vvm(height+1,vm(numPeople+1,0)));
 
-	for (int l = 2; l < height; l++) {
-		for (int f = 1; f < l*(l+1)/2; f++) {
-			dp[l][f] = 0;
-			// hier moet nog meer
+	dp[0][0][0] = 1;
+
+	for (int w = 1; w <= 100; w++) {
+		for (int h = 0; h <= w; h++) {
+			for (int p=0; p <= 5050; p++) {
+				for (int h2 = 0; h2 <= h; h2++) {
+					if (p-h2 >= 0) {
+						if (h2 > w-1) dp[w][h][p] += dp[w-1][w-1][p-h2];
+						else dp[w][h][p] += dp[w-1][h2][p-h2];
+					}
+				}
+			}
 		}
 	}
 
+	cout << dp[height][height][numFlexible] << endl;
 
 	return 0;
 }
