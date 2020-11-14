@@ -1,14 +1,15 @@
 #include <iostream>
+#include <queue>
 
 using namespace std;
 
 int main(){
     int N; cin>>N;
     int nm[20100];
-    int order[20100];
+    queue<int> order;
     for(int m=1; m<=2*N; m++){
 	nm[m] = -1;
-	order[m] = (m-1)%N+1;
+	order.push((m-1)%N+1);
     }
     
     int ind = 1;
@@ -17,15 +18,21 @@ int main(){
 	if(nm[a] != -1)
 	    cout << nm[a] << endl;
 	else {
-	    nm[a] = order[ind];
-	    cout << order[ind++] << endl;
+	    nm[a] = order.front();
+	    cout << order.front() << endl;
+	    order.pop();
 	}
 	cin>>b;
 	if(nm[b]!=-1)
 	    cout << nm[b] << endl;
 	else {
-	    nm[b] = order[ind];
-	    cout << order[ind++] << endl;
+	    if(order.front() == nm[a]){
+		order.push(order.front());
+		order.pop();
+	    }
+	    nm[b] = order.front();
+	    order.pop();
+	    cout << nm[b] << endl;
 	}
     }
 }
