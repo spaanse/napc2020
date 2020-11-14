@@ -8,9 +8,9 @@ int main(){
     cin >> no_of_jars >> capacity;
     
     if((no_of_jars % capacity) == 0){
-        cout << (no_of_jars / capacity) << endl;
+        cout << capacity << endl;
     }
-    else{
+    else {
         long long boxes = no_of_jars / capacity + 1;
         long long minimum_in_box = no_of_jars / boxes;
         cout << minimum_in_box << endl;
