@@ -64,19 +64,16 @@ int main() {
 	cin >> height >> numStrong;
 	int numPeople = height*(height+1)/2, numFlexible=numPeople-numStrong;
 	
-	vvvm dp(height+1, vvm(height+1,vm(numPeople+1,0)));
+	vvvm dp(101, vvm(101,vm(5051,0)));
 
 	dp[0][0][0] = 1;
 
-	for (int w = 1; w <= 100; w++) {
-		for (int h = 0; h <= w; h++) {
-			for (int p=0; p <= 5050; p++) {
-				for (int h2 = 0; h2 <= h; h2++) {
-					if (p-h2 >= 0) {
-						if (h2 > w-1) dp[w][h][p] += dp[w-1][w-1][p-h2];
-						else dp[w][h][p] += dp[w-1][h2][p-h2];
-					}
-				}
+	for (int p=0; p <= numPeople; p++) {
+		for (int w = 1; w <= height; w++) {
+			for (int h = 0; h <= w; h++) {
+				if (h > 0) dp[w][h][p] = dp[w][h-1][p];
+				if (h < w  and h <= p) dp[w][h][p] += dp[w-1][h][p-h];
+				if (h >= w and h <= p) dp[w][h][p] += dp[w-1][w-1][p-h];
 			}
 		}
 	}
